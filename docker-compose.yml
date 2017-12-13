@@ -1,0 +1,52 @@
+version: '3'
+services:
+
+  plex:
+    container_name: plex
+    image: linuxserver/plex
+    environment:
+      - VERSION=latest
+    env_file:
+      - .env
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - /opt/docker-media-server/plex/config:/config
+      - /tmp/plex-transcode:/transcode
+      - /tvshows:/tvshows
+      - /movies:/movies
+
+  sonarr:
+    container_name: sonarr
+    image: linuxserver/sonarr
+    env_file:
+      - .env
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - /opt/docker-media-server/sonarr/config:/config
+      - /tvshows:/tvshows
+      - /downloads:/downloads
+
+  radarr:
+    container_name: radarr
+    image: linuxserver/radarr
+    restart: unless-stopped
+    env_file:
+      - .env
+    network_mode: host
+    volumes:
+      - /opt/docker-media-server/radarr/config:/config
+      - /movies:/movies
+      - /downloads:/downloads
+
+  nzbget:
+    container_name: nzbget
+    image: linuxserver/nzbget
+    env_file:
+      - .env
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - /opt/docker-media-server/nzbget/config:/config
+      - /downloads:/downloads
